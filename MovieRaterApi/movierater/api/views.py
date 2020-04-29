@@ -2,16 +2,21 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .models import Movie, Rating
-from .serializers import MovieSerializer, RatingSerializer
+from .serializers import MovieSerializer, RatingSerializer, UserSerializer
 from django.contrib.auth.models import User
 
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
     # Retrieve token 
     authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
 
     # detail=True - body is required
     @action(detail=True, methods=['POST'])
@@ -40,8 +45,17 @@ class MovieViewSet(viewsets.ModelViewSet):
             response = {'message': "You need to provide stars"}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
-
 class RatingViewSet(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
     authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+
+    # Overwrite and restrict app 
+    def update(self, request, *args, **kwargs):
+        response = {'message': "You can't update rating like that"}
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    def create(self, request, *args, **kwargs):
+        response = {'message': "You can't create rating like that"}
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
