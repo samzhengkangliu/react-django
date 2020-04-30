@@ -1,0 +1,30 @@
+.MovieList {
+    .movie {
+        display: flex;
+        justify-content: flex-start;
+    }
+    .movie span {
+        font-size: 2em;
+        margin: 16px 5px;
+    }
+    .edit {
+        color: lightseagreen;
+        background-color:transparent;
+        border-style: none;
+        margin-left: 2rem;
+        transition: transform .2s;
+    }
+    .edit:hover {
+        transform: scale(1.2);
+    }
+    .delete {
+        background-color:transparent;
+        border-style: none;
+        margin-left: 2rem;
+        color: lightcoral;
+        transition: transform .2s;
+    }
+    .delete:hover {
+        transform: scale(1.2);
+    }
+}
